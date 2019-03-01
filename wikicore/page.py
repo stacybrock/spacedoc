@@ -32,7 +32,10 @@ class WikiPage():
     def __str__(self):
         return f"<WikiPage {self.path}> [{self.tags}]"
 
-    def render_html(self):
+    def render_html(self, linkroot=None):
+        if linkroot is None:
+            linkroot = ''
+
         content = self.content
 
         wikilinks = re.findall(r'(\[\[.*?\]\])', content)
@@ -50,7 +53,7 @@ class WikiPage():
 
             if self.docformat == 'markdown':
                 content = re.sub(re.escape(wikilink), \
-                                 f"[{linktext}]({linkpath})", content)
+                                 f"[{linktext}]({linkroot}/{linkpath})", content)
         # print(content)
         if self.docformat == 'markdown':
             return markdown.markdown(content)
