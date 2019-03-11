@@ -4,6 +4,8 @@ import re
 import yaml
 
 class WikiPage():
+    wiki = None
+
     def __init__(self, pageblob):
         self.path = pageblob.path
 
@@ -30,12 +32,9 @@ class WikiPage():
         self.content = re.sub(r'^---\n(.+)\n---\n', '', self.raw, re.MULTILINE)
 
     def __str__(self):
-        return f"<WikiPage {self.path}> [{self.tags}]"
+        return f"<WikiPage {self.path}>, tags=[{self.tags}]"
 
-    def render_html(self, linkroot=None):
-        if linkroot is None:
-            linkroot = ''
-
+    def to_html(self):
         content = self.content
 
         wikilinks = re.findall(r'(\[\[.*?\]\])', content)
@@ -52,8 +51,10 @@ class WikiPage():
                 continue
 
             if self.docformat == 'markdown':
-                content = re.sub(re.escape(wikilink), \
-                                 f"[{linktext}]({linkroot}/{linkpath})", content)
+                content = re.sub(
+                    re.escape(wikilink),
+                    f"[{linktext}]({self.wiki.base_path}/{linkpath})",
+                    content)
         # print(content)
         if self.docformat == 'markdown':
             return markdown.markdown(content)

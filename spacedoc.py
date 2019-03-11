@@ -1,41 +1,41 @@
 import flask
-from flask import g
 import wikicore
+from flask import g
 
-app = flask.Flask(__name__)
+# create Flask app
+app = flask.Flask(__name__, instance_relative_config=True)
+app.config.from_pyfile('config.cfg')
+
 
 @app.before_request
 def before_request():
     if 'wiki' not in g:
-        g.wiki = wikicore.Wiki('/tmp/wiki-test')
+        g.wiki = wikicore.Wiki(app.config['WIKI_REPO_DIR'], base_path='/page')
+        wikicore.WikiPage.wiki = g.wiki
 
 
 @app.route('/')
 def index():
-    return flask.redirect('/wiki', code=302)
+    return flask.redirect('/page/index', code=302)
 
 
-@app.route('/wiki')
+@app.route('/page/index')
 def view_wiki_index():
-    page = g.wiki.get_page('index.md')
-    if page is not None:
-        return page.render_html(linkroot='/wiki')
-    else:
-        pass #TODO
+    return view_page('index.md')
 
 
-@app.route('/wiki/<path:pagepath>')
+@app.route('/page/<path:pagepath>')
 def view_page(pagepath):
     page = g.wiki.get_page(pagepath)
     if page is not None:
-        return page.render_html(linkroot='/wiki')
+        return page.to_html()
     else:
         pass #TODO
 
 
 @app.teardown_appcontext
 def teardown_app(error):
-    g.wiki.__del__()
+    g.wiki.close()
 
 
 if __name__ == '__main__':

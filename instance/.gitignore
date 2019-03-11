@@ -1,0 +1,5 @@
+# ignore files in this dir
+*
+# except these
+!.gitignore
+!config.cfg-dist
