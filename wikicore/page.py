@@ -1,13 +1,16 @@
 import io
 import markdown
+import os
 import re
 import yaml
+from asciidocapi import AsciiDocAPI
 
 class WikiPage():
     wiki = None
 
     def __init__(self, pageblob):
         self.path = pageblob.path
+        self.fullpath = pageblob.abspath
 
         if re.search(r'\.md$', self.path, re.IGNORECASE):
             self.docformat = 'markdown'
@@ -55,7 +58,22 @@ class WikiPage():
                     re.escape(wikilink),
                     f"[{linktext}]({self.wiki.base_path}/{linkpath})",
                     content)
+            elif self.docformat == 'asciidoc':
+                pass
 
+        html = ''
         if self.docformat == 'markdown':
-            return markdown.markdown(content,
+            html = markdown.markdown(content,
                                      extensions=['fenced_code', 'sane_lists'])
+        elif self.docformat == 'asciidoc':
+            asciidoc_py = self.wiki.asciidoc + '/asciidoc.py'
+            asciidoc_conf = f"{os.path.dirname(os.path.abspath(__file__))}/../asciidocapi/html5.conf"
+
+            asciidoc = AsciiDocAPI(asciidoc_py=asciidoc_py)
+            asciidoc.options.append('--backend', 'html5')
+            asciidoc.options.append('--conf-file', asciidoc_conf)
+            outfile = io.StringIO()
+            asciidoc.execute(self.fullpath, outfile)
+            html = outfile.getvalue()
+
+        return html

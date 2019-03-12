@@ -15,7 +15,10 @@ def before_request():
     if 'wiki' not in g:
         g.wiki = wikicore.Wiki(app.config['WIKI_REPO_DIR'],
                                base_path=app.config['WIKI_ROOT'])
+        if app.config['ASCIIDOC_PY3']:
+            g.wiki.init_asciidoc(app.config['ASCIIDOC_PY3'])
         wikicore.WikiPage.wiki = g.wiki
+
     g.wiki_name = app.config['WIKI_NAME']
 
 
@@ -26,11 +29,15 @@ def index():
 
 @app.route('/search', methods=['POST'])
 def search():
+    searchterm = ''
+    results = []
+
     if 'searchterm' in flask.request.form:
         searchterm = flask.request.form['searchterm']
         results = g.wiki.search(searchterm, case_insensitive=True)
-        return flask.render_template('default/search.html',
-                                     searchterm=searchterm, results=results)
+
+    return flask.render_template('default/search.html',
+                                 searchterm=searchterm, results=results)
 
 
 @app.teardown_appcontext
