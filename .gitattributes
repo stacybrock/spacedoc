@@ -1,0 +1,5 @@
+static/css/bootstrap* linguist-vendored
+static/css/github-markdown.css linguist-vendored
+static/js/bootstrap* linguist-vendored
+static/js/jquery* linguist-vendored
+static/js/popper* linguist-vendored
