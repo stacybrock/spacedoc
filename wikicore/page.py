@@ -57,4 +57,5 @@ class WikiPage():
                     content)
 
         if self.docformat == 'markdown':
-            return markdown.markdown(content)
+            return markdown.markdown(content,
+                                     extensions=['fenced_code', 'sane_lists'])
