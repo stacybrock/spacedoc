@@ -1,0 +1,14 @@
+{% extends "default/base.html" %}
+
+{% block content %}
+<h1>Search results for '{{ searchterm }}':</h1>
+{% if results %}
+  <ul>
+  {% for result in results %}
+    <li>{{ result|safe }}</li>
+  {% endfor %}
+  </ul>
+{% else %}
+No results found.
+{% endif %}
+{% endblock %}

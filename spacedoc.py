@@ -24,6 +24,15 @@ def index():
     return flask.redirect(f"{app.config['WIKI_ROOT']}/index", code=302)
 
 
+@app.route('/search', methods=['POST'])
+def search():
+    if 'searchterm' in flask.request.form:
+        searchterm = flask.request.form['searchterm']
+        results = g.wiki.search(searchterm, case_insensitive=True)
+        return flask.render_template('default/search.html',
+                                     searchterm=searchterm, results=results)
+
+
 @app.teardown_appcontext
 def teardown_app(error):
     g.wiki.close()
