@@ -1,36 +1,26 @@
 import flask
 import wikicore
 from flask import g
+from blueprints.wikirenderer import wikirenderer
 
 # create Flask app
 app = flask.Flask(__name__, instance_relative_config=True)
 app.config.from_pyfile('config.cfg')
+app.register_blueprint(wikirenderer, url_prefix=app.config['WIKI_ROOT'])
+app.config['EXPLAIN_TEMPLATE_LOADING'] = True
 
 
 @app.before_request
 def before_request():
     if 'wiki' not in g:
-        g.wiki = wikicore.Wiki(app.config['WIKI_REPO_DIR'], base_path='/page')
+        g.wiki = wikicore.Wiki(app.config['WIKI_REPO_DIR'],
+                               base_path=app.config['WIKI_ROOT'])
         wikicore.WikiPage.wiki = g.wiki
 
 
 @app.route('/')
 def index():
-    return flask.redirect('/page/index', code=302)
-
-
-@app.route('/page/index')
-def view_wiki_index():
-    return view_page('index.md')
-
-
-@app.route('/page/<path:pagepath>')
-def view_page(pagepath):
-    page = g.wiki.get_page(pagepath)
-    if page is not None:
-        return page.to_html()
-    else:
-        pass #TODO
+    return flask.redirect(f"{app.config['WIKI_ROOT']}/index", code=302)
 
 
 @app.teardown_appcontext

@@ -1,1 +1,2 @@
 WIKI_REPO_DIR='/path/to/wiki-repo'
+WIKI_ROOT='/page'
