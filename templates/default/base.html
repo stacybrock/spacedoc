@@ -7,11 +7,26 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-4.3.1.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 
-    <title>spacedoc</title>
+    <title>{{ g.wiki_name }}
+      {% if title %}
+      - {{ title }}
+      {% endif %}
+    </title>
   </head>
   <body>
-    {% block content %}{% endblock %}
+    <!-- Navbar -->
+    {% include "default/navbar.html" %}
+
+    <!-- Content -->
+    <div class="container">
+      <div class="row row-m-top">
+        <div class="col">
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+    </div>
 
     <!-- Bootstrap JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

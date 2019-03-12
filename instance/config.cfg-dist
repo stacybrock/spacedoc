@@ -1,2 +1,9 @@
-WIKI_REPO_DIR='/path/to/wiki-repo'
-WIKI_ROOT='/page'
+# path to git repo containing wiki content
+WIKI_REPO_DIR='~/wiki-test'
+
+# URL root for wiki pages
+# Default wiki index is: http://127.0.0.1:5000/wiki
+WIKI_ROOT='/wiki'
+
+# Name of wiki to display on navbar and page titles
+WIKI_NAME='spacedoc'

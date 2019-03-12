@@ -20,7 +20,7 @@ class WikiPage():
             self.raw = f.read().decode('utf-8')
 
         self.frontmatter = None
-        match = re.match(r'(---\n.+\n---).*$', self.raw, re.MULTILINE)
+        match = re.match(r'(---\n.+\n)---.*$', self.raw, re.MULTILINE)
         if match:
             self.frontmatter = match[1]
 
@@ -55,6 +55,6 @@ class WikiPage():
                     re.escape(wikilink),
                     f"[{linktext}]({self.wiki.base_path}/{linkpath})",
                     content)
-        # print(content)
+
         if self.docformat == 'markdown':
             return markdown.markdown(content)

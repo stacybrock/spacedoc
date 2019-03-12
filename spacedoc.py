@@ -7,7 +7,7 @@ from blueprints.wikirenderer import wikirenderer
 app = flask.Flask(__name__, instance_relative_config=True)
 app.config.from_pyfile('config.cfg')
 app.register_blueprint(wikirenderer, url_prefix=app.config['WIKI_ROOT'])
-app.config['EXPLAIN_TEMPLATE_LOADING'] = True
+#app.config['EXPLAIN_TEMPLATE_LOADING'] = True
 
 
 @app.before_request
@@ -16,6 +16,7 @@ def before_request():
         g.wiki = wikicore.Wiki(app.config['WIKI_REPO_DIR'],
                                base_path=app.config['WIKI_ROOT'])
         wikicore.WikiPage.wiki = g.wiki
+    g.wiki_name = app.config['WIKI_NAME']
 
 
 @app.route('/')
