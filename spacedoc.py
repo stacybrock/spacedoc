@@ -15,8 +15,6 @@ def before_request():
     if 'wiki' not in g:
         g.wiki = wikicore.Wiki(app.config['WIKI_REPO_DIR'],
                                base_path=app.config['WIKI_ROOT'])
-        if app.config['ASCIIDOC_PY3']:
-            g.wiki.init_asciidoc(app.config['ASCIIDOC_PY3'])
         wikicore.WikiPage.wiki = g.wiki
 
     g.wiki_name = app.config['WIKI_NAME']

@@ -6,8 +6,6 @@ from .page import WikiPage
 
 class Wiki():
     def __init__(self, repo_path, base_path=None):
-        self.asciidoc = None
-
         if base_path is None:
             self.base_path = ''
         else:
@@ -16,9 +14,6 @@ class Wiki():
 
     def __del__(self):
         self.repo.__del__()
-
-    def init_asciidoc(self, asciidoc_path):
-        self.asciidoc = asciidoc_path
 
     def close(self):
         self.__del__()
