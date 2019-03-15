@@ -15,6 +15,6 @@ def view_page(pagepath):
     page_content = Markup(page.to_html())
     try:
         return render_template('default/page.html', content=page_content,
-                               title=pagepath)
+                               title=pagepath, docformat=page.docformat)
     except TemplateNotFound:
         abort(404)

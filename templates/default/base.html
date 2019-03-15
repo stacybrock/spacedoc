@@ -7,14 +7,14 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-4.3.1.min.css') }}">
+
+    <!-- Other CSS -->
+    {% if docformat == 'markdown' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/github-markdown.css') }}">
+    {% endif %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
 
-    <title>{{ g.wiki_name }}
-      {% if title %}
-      - {{ title }}
-      {% endif %}
-    </title>
+    <title>{% if title %}{{ title }} - {% endif %}{{ g.wiki_name }}</title>
   </head>
   <body>
     <!-- Navbar -->
@@ -23,7 +23,7 @@
     <!-- Content -->
     <div class="container">
       <div class="row row-m-top">
-        <div class="col markdown-body">
+        <div class="col {% if docformat == 'markdown' %}markdown-body{% endif %}">
           {% block content %}{% endblock %}
         </div>
       </div>
